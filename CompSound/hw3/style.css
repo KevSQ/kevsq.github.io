@@ -1,0 +1,48 @@
+body{
+  background: #f8f8f8;
+}
+
+.wrapper{
+  width:250px;
+  height:310px;
+  position:absolute;
+  left:50%;
+  top:50%;
+  margin:-155px 0 0 -125px;
+  text-align:center;
+}
+
+
+.dtmf{
+  width:250px;
+  margin:0;
+  padding:0;
+  overflow:hidden;
+}
+
+.dtmf li{
+  float:left;
+  margin:10px;
+  list-style:none;
+  width:30px;
+  height:30px;
+  text-align:center;
+  line-height:30px;
+  font-size: 24px;
+  border: solid 1px #333;
+  border-radius:3px;
+  transition: all 0.5s;
+}
+
+.dtmf li:hover{
+  color: #939393;
+  border-color:#939393;
+  transition-duration:0s;
+  cursor:pointer;
+}
+
+.dtmf li:active{
+  color: #F60;
+  border-color:#F60;
+  transition-duration:0s;
+}
