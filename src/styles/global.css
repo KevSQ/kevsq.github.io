@@ -41,6 +41,8 @@ html, body {
   background: var(--bg);
   color: var(--fg);
   font-family: var(--serif);
+  zoom: 1.1;
+
 }
 
 a {
