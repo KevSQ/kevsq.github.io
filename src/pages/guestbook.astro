@@ -2,22 +2,9 @@
 import Base from '../layouts/Base.astro';
 import SlashNav from '../components/SlashNav.astro';
 import GuestbookForm from '../components/GuestbookForm';
-import { createClient } from '@supabase/supabase-js';
+import { fetchGuestbookEntries } from '../lib/supabase-server';
 
-const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
-const supabaseKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
-
-let initialEntries: { id: number; name: string; message: string; created_at: string }[] = [];
-
-if (supabaseUrl && supabaseKey) {
-  const supabase = createClient(supabaseUrl, supabaseKey);
-  const { data } = await supabase
-    .from('guestbook')
-    .select('*')
-    .order('created_at', { ascending: false })
-    .limit(50);
-  initialEntries = data ?? [];
-}
+const initialEntries = await fetchGuestbookEntries(50);
 ---
 <Base title="Guestbook — Kevin's Field Journal">
   <main class="page">
@@ -33,5 +20,9 @@ if (supabaseUrl && supabaseKey) {
     max-width: 760px;
     margin: 0 auto;
     padding: 28px 40px 36px;
+  }
+
+  @media (max-width: 640px) {
+    .page { padding: 20px 20px 28px; }
   }
 </style>

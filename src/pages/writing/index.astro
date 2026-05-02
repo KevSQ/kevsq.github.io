@@ -37,4 +37,8 @@ const posts = (await getCollection('writing'))
   .post a.title-link { font-family: var(--serif); font-size: 16.5px; color: var(--fg); text-decoration: underline var(--accent); text-underline-offset: 4px; text-decoration-thickness: 1px; font-style: italic; }
   .post .age  { font-family: var(--mono); font-size: 10.5px; color: var(--dim); white-space: nowrap; }
   .post .meta { font-family: var(--mono); font-size: 11px; color: var(--dim); margin-top: 2px; }
+
+  @media (max-width: 640px) {
+    .page { padding: 20px 20px 28px; }
+  }
 </style>
