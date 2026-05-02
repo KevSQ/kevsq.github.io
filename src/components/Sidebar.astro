@@ -27,36 +27,166 @@ const entries = await fetchGuestbookEntries(5);
 </aside>
 
 <script>
-  const frames = [
+  const ANIMS = [
+    // 1. Spinning flower — moss
+    {
+      color: 'var(--moss)',
+      ms: 200,
+      frames: [
 `   \\ | /
-  --✱--
+   ─(✶)─
    / | \\
     |||
    \\\\|//
 ~~~~~~~~~~`,
-
-`   \\ | /
-  --✲--
-   / | \\
+`   ─ | ─
+   \\(✶)/
+   ─ | ─
     |||
    \\\\|//
 ~~~~~~~~~~`,
-
-`   \\ | /
-  --✳--
-   / | \\
+`   / | \\
+   ─(✶)─
+   \\ | /
     |||
    \\\\|//
-~~~~~~~~~~`
+~~~~~~~~~~`,
+`   ─ | ─
+   /(✶)\\
+   ─ | ─
+    |||
+   \\\\|//
+~~~~~~~~~~`,
+      ]
+    },
+    // 2. Blinking cat — brass
+    {
+      color: 'var(--accent)',
+      ms: 500,
+      frames: [
+`  /\\_/\\
+ ( ^.^ )
+  > ~ <
+    |
+   / \\
+~~~~~~~~~~`,
+`  /\\_/\\
+ ( -.^ )
+  > ~ <
+    |
+   / \\
+~~~~~~~~~~`,
+`  /\\_/\\
+ ( ^.- )
+  > ~ <
+    |
+   / \\
+~~~~~~~~~~`,
+`  /\\_/\\
+ ( -.- )
+  > u <
+    |
+   / \\
+~~~~~~~~~~`,
+      ]
+    },
+    // 3. Bouncing ball — sky
+    {
+      color: 'var(--sky)',
+      ms: 130,
+      frames: [
+`    ●
+
+
+
+
+~~~~~~~~~~`,
+`
+    ●
+
+
+
+~~~~~~~~~~`,
+`
+
+    ●
+
+
+~~~~~~~~~~`,
+`
+
+
+    ●
+
+~~~~~~~~~~`,
+`
+
+
+
+   (●)
+~~~~~~~~~~`,
+`
+
+
+    ●
+
+~~~~~~~~~~`,
+`
+
+    ●
+
+
+~~~~~~~~~~`,
+`
+    ●
+
+
+
+~~~~~~~~~~`,
+      ]
+    },
+    // 4. Waving figure — terra
+    {
+      color: 'var(--terra)',
+      ms: 250,
+      frames: [
+`   \\o/
+    |
+    |
+   / \\
+
+~~~~~~~~~~`,
+`    o─
+    |
+    |
+   / \\
+
+~~~~~~~~~~`,
+`   /o\\
+    |
+    |
+   / \\
+
+~~~~~~~~~~`,
+`   ─o
+    |
+    |
+   / \\
+
+~~~~~~~~~~`,
+      ]
+    },
   ];
 
-  let i = 0;
-  const el = document.getElementById("flora");
-
+  const anim = ANIMS[Math.floor(Math.random() * ANIMS.length)];
+  const el = document.getElementById('flora');
+  el.style.color = anim.color;
+  el.textContent = anim.frames[0];
+  let frame = 1;
   setInterval(() => {
-    el.textContent = frames[i % frames.length];
-    i++;
-  }, 500);
+    el.textContent = anim.frames[frame % anim.frames.length];
+    frame++;
+  }, anim.ms);
 </script>
 
 <style>
