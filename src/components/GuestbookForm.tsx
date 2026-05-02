@@ -99,7 +99,7 @@ export default function GuestbookForm({ initialEntries }: Props) {
         .gb-entries-label { margin-top: 0; }
         .gb-entry { padding: 10px 0; border-bottom: 1px dashed var(--border); }
         .gb-entry:last-child { border-bottom: none; }
-        .gb-quote { font-family: var(--hand); color: var(--fg); font-size: 15px; line-height: 1.4; }
+        .gb-quote { font-family: var(--hand); color: var(--fg); font-size: 15px; line-height: 1.4; overflow-wrap: break-word; }
         .gb-author { font-family: var(--mono); font-size: 10.5px; color: var(--dim); margin-top: 4px; }
         .gb-empty { font-family: var(--mono); font-size: 11px; color: var(--dim); margin: 0 0 28px; }
       `}</style>
