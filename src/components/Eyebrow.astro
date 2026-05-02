@@ -1,0 +1,24 @@
+---
+// src/components/Eyebrow.astro
+---
+<div class="eyebrow">
+  <span>vol. viii ·</span>
+  <span class="dim">spring almanac · may '26</span>
+</div>
+
+<style>
+  .eyebrow {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 2px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+  }
+  .dim {
+    color: var(--dim);
+  }
+</style>
