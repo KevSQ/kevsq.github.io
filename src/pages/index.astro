@@ -1,6 +1,154 @@
 ---
 import Base from '../layouts/Base.astro';
+import Eyebrow from '../components/Eyebrow.astro';
+import SlashNav from '../components/SlashNav.astro';
+import Sidebar from '../components/Sidebar.astro';
 ---
 <Base>
-  <p style="color: var(--fg); font-family: var(--mono); padding: 20px;">design system active</p>
+  <main class="page">
+    <article>
+      <Eyebrow />
+
+      <h1 class="title">Kevin's <em>field journal</em></h1>
+      <p class="tagline">Notes from a software engineer who reads more than he ships. Pruned weekly.</p>
+
+      <SlashNav active="/writing" />
+
+      <div class="label">❦ recently tended</div>
+
+      <div class="post">
+        <div class="row">
+          <a class="title-link" href="/writing/writing-tools">On writing tools that don't fight you</a>
+          <span class="age">🌱 budding</span>
+        </div>
+        <div class="meta">tended 3 days ago</div>
+      </div>
+
+      <div class="post">
+        <div class="row">
+          <a class="title-link" href="/writing/love-letter-grep">A small love letter to grep</a>
+          <span class="age">🌳 evergreen</span>
+        </div>
+        <div class="meta">tended 2 weeks ago</div>
+      </div>
+
+      <div class="post">
+        <div class="row">
+          <a class="title-link" href="/writing/read-stack-trace">Three ways to read a stack trace</a>
+          <span class="age">🌳 evergreen</span>
+        </div>
+        <div class="meta">tended last month</div>
+      </div>
+
+      <div class="post">
+        <div class="row">
+          <a class="title-link" href="/writing/bug-journal">Why I keep a bug journal</a>
+          <span class="age">🌱 budding</span>
+        </div>
+        <div class="meta">tended last month</div>
+      </div>
+
+      <div class="label gardener-label">❦ from the gardener</div>
+      <p class="gardener">
+        I'm Kevin, a Brooklyn-based software engineer focused on backend
+        systems. I write here about the craft, the tools, and what I'm
+        learning. Recruiters welcome — clean PDF resume one click away.
+      </p>
+    </article>
+
+    <Sidebar />
+  </main>
 </Base>
+
+<style>
+  .page {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 28px 40px 36px;
+    display: grid;
+    grid-template-columns: 1fr 150px;
+    gap: 24px;
+  }
+
+  h1.title {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 36px;
+    line-height: 1.1;
+    margin: 4px 0 6px;
+    letter-spacing: -0.5px;
+    color: var(--fg);
+  }
+  h1.title em {
+    color: var(--accent);
+    font-style: italic;
+  }
+
+  .tagline {
+    font-size: 14.5px;
+    color: var(--dim);
+    font-style: italic;
+    margin: 0 0 16px;
+    line-height: 1.55;
+  }
+
+  .label {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--dim);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 10px;
+  }
+  .gardener-label {
+    margin: 22px 0 8px;
+  }
+
+  .post {
+    padding: 10px 0;
+    border-bottom: 1px dashed var(--border);
+  }
+  .post:last-of-type {
+    border-bottom: none;
+  }
+  .post .row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .post a.title-link {
+    font-family: var(--serif);
+    font-size: 16.5px;
+    color: var(--fg);
+    text-decoration: underline var(--accent);
+    text-underline-offset: 4px;
+    text-decoration-thickness: 1px;
+    font-style: italic;
+  }
+  .post .age {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--dim);
+    white-space: nowrap;
+  }
+  .post .meta {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--dim);
+    margin-top: 2px;
+  }
+
+  .gardener {
+    font-size: 14.5px;
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  @media (max-width: 640px) {
+    .page {
+      grid-template-columns: 1fr;
+      padding: 20px 20px 28px;
+    }
+  }
+</style>
