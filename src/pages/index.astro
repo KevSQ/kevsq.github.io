@@ -35,7 +35,7 @@ function tendedLabel(date: Date): string {
       {posts.map(post => (
         <div class="post">
           <div class="row">
-            <a class="title-link" href={`/writing/${post.id}`}>{post.data.title}</a>
+            <a class="title-link" href={`/writing/${post.id.replace(/\.mdx?$/, '')}`}>{post.data.title}</a>
             <span class="age">
               {post.data.status === 'budding' ? '🌱 budding' : '🌳 evergreen'}
             </span>
