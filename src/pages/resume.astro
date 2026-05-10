@@ -1,22 +1,207 @@
 ---
 import Base from '../layouts/Base.astro';
+import Eyebrow from '../components/Eyebrow.astro';
 import SlashNav from '../components/SlashNav.astro';
+import Sidebar from '../components/Sidebar.astro';
+
+interface RoleItem {
+  title: string;
+  company: string;
+  when: string;
+  bullets: string[];
+}
+
+const experience: RoleItem[] = [
+  {
+    title: 'Staff Engineer',
+    company: 'Lattice Inc.',
+    when: '2023–present',
+    bullets: [
+      'Designed and shipped the distributed object store backing internal analytics — handles ~2 TB/day ingest with sub-200ms p99 reads.',
+      'Led a 14-month migration away from a third-party blob store, reducing storage costs by ~40% and eliminating a critical external dependency.',
+      'Mentored three engineers to senior level; established the on-call rotation and playbook for the storage org.',
+    ],
+  },
+  {
+    title: 'Senior Engineer',
+    company: 'Quicksilver Labs',
+    when: '2021–2023',
+    bullets: [
+      'Built a high-throughput job queue in Rust with strict FIFO ordering guarantees for financial transaction processing.',
+      'Replaced a brittle cron-based scheduling system; zero missed jobs across 18 months of production at 50k jobs/day.',
+    ],
+  },
+  {
+    title: 'Software Engineer',
+    company: 'Hearth',
+    when: '2018–2021',
+    bullets: [
+      'Core contributor to the notification delivery platform — owned the pipeline from event ingestion to multi-channel fan-out.',
+      'Migrated the primary data store from MongoDB to Postgres without downtime; reduced query latency by 3×.',
+    ],
+  },
+];
+
+const skills = [
+  { key: 'lang',  val: 'Go · Rust · TypeScript · some Elixir' },
+  { key: 'data',  val: 'Postgres · Redis · Kafka · SQLite' },
+  { key: 'ops',   val: 'Linux · Docker · Nomad · Cloudflare' },
+  { key: 'style', val: 'distributed systems · API design · boring tech' },
+];
 ---
 <Base title="Resume — Kevin's Field Journal">
   <main class="page">
     <article>
+      <Eyebrow sub="resume · last revised may '26" />
+      <h1 class="title">Curriculum <em>vitae</em>.</h1>
+      <p class="tagline">The recruiter-friendly version. Also available as a tidy PDF.</p>
       <SlashNav active="/resume" />
-      <h1 class="stub-title">resume</h1>
-      <p class="stub-note">
-        <a href="/Kevin Medina Eng_Resume.pdf" class="pdf-link">Download PDF →</a>
+
+      <div class="pdf-card">
+        <div class="pdf-icon">PDF</div>
+        <div class="pdf-meta">
+          <div class="pdf-name">Kevin — Resume.pdf</div>
+          <div class="pdf-sub">2 pages · revised may 1, 2026 · 184 kb</div>
+        </div>
+        <a class="btn" href="/Kevin Medina Eng_Resume.pdf" download>download ↓</a>
+      </div>
+
+      <div class="divider-label">❦ summary</div>
+      <p class="prose">
+        Backend-focused engineer with eight years building reliable distributed systems in Go and Rust.
+        I gravitate toward the parts of a stack where correctness is non-negotiable — queues, storage engines, sync protocols.
+        Currently open to staff and senior backend roles where the work is technically demanding and the team is small enough to actually ship.
       </p>
+
+      <div class="divider-label">❦ experience</div>
+      {experience.map(role => (
+        <div class="role">
+          <div class="role-head">
+            <span class="role-title">{role.title}, <em>{role.company}</em></span>
+            <span class="when">{role.when}</span>
+          </div>
+          <ul>
+            {role.bullets.map(b => <li>{b}</li>)}
+          </ul>
+        </div>
+      ))}
+
+      <div class="divider-label">❦ skills</div>
+      <div class="skill-grid">
+        {skills.map(s => (
+          <>
+            <span class="skill-key">{s.key}</span>
+            <span>{s.val}</span>
+          </>
+        ))}
+      </div>
+
+      <div class="divider-label">❦ education</div>
+      <p class="prose" style="font-style: italic;">B.S. Computer Science, Rutgers University, 2018.</p>
     </article>
+
+    <Sidebar>
+      <div class="block">
+        <div class="heading">status</div>
+        <div class="body" style="color: var(--moss);">● available</div>
+        <div>staff / senior backend<br/>remote or nyc</div>
+      </div>
+      <div class="block">
+        <div class="heading">contact</div>
+        <div><a href="mailto:kevinxmedina@gmail.com" style="color: var(--accent);">kevinxmedina@<br/>gmail.com</a></div>
+      </div>
+      <div class="block">
+        <div class="heading">last revised</div>
+        <div>may 1, 2026</div>
+      </div>
+    </Sidebar>
   </main>
 </Base>
+
 <style>
-  .page { max-width: 760px; margin: 0 auto; padding: 28px 40px 36px; }
-  .stub-title { font-family: var(--serif); font-weight: 400; font-size: 30px; color: var(--fg); font-style: italic; margin: 0 0 12px; letter-spacing: -0.3px; }
-  .stub-note { font-family: var(--mono); font-size: 11px; color: var(--dim); }
-  .pdf-link { color: var(--accent); }
-  @media (max-width: 640px) { .page { padding: 20px 20px 28px; } }
+  .pdf-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 14px 16px;
+    margin: 4px 0 22px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .pdf-icon {
+    width: 44px;
+    height: 56px;
+    flex-shrink: 0;
+    border: 1px solid var(--accent);
+    background: rgba(212, 163, 115, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 1px;
+    font-weight: 700;
+  }
+  .pdf-meta { flex: 1; }
+  .pdf-name {
+    font-family: var(--serif);
+    font-size: 16px;
+    color: var(--fg);
+  }
+  .pdf-sub {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--dim);
+    margin-top: 2px;
+  }
+
+  .role {
+    padding: 12px 0;
+    border-bottom: 1px dashed var(--border);
+  }
+  .role:last-of-type { border-bottom: none; }
+  .role-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .role-title {
+    font-family: var(--serif);
+    font-size: 16px;
+    color: var(--fg);
+  }
+  .role-title em {
+    color: var(--accent);
+    font-style: italic;
+  }
+  .when {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--dim);
+    white-space: nowrap;
+  }
+  .role ul {
+    margin: 6px 0 0 18px;
+    padding: 0;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--fg);
+  }
+  .role li { margin-bottom: 3px; }
+
+  .skill-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 4px 16px;
+    font-size: 13.5px;
+    color: var(--fg);
+  }
+  .skill-key {
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 11px;
+  }
 </style>
