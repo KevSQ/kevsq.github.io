@@ -1,28 +1,38 @@
 ---
 import Base from '../layouts/Base.astro';
+import Eyebrow from '../components/Eyebrow.astro';
 import SlashNav from '../components/SlashNav.astro';
+import Sidebar from '../components/Sidebar.astro';
 import GuestbookForm from '../components/GuestbookForm';
 import { fetchGuestbookEntries } from '../lib/supabase-server';
 
-const initialEntries = await fetchGuestbookEntries(50);
+const initialEntries = await fetchGuestbookEntries(6);
+const totalCount = 42;
 ---
 <Base title="Guestbook — Kevin's Field Journal">
   <main class="page">
     <article>
+      <Eyebrow sub={`guestbook · ${totalCount} entries since 2018`} />
+      <h1 class="title">Sign the <em>guestbook</em>.</h1>
+      <p class="tagline">A quiet wall to leave a note. No login, no email, no spam. Read by me, eventually.</p>
       <SlashNav active="/guestbook" />
       <GuestbookForm initialEntries={initialEntries} client:load />
     </article>
+
+    <Sidebar>
+      <div class="block">
+        <div class="heading">house rules</div>
+        <div>kindness · curiosity<br/>no marketing<br/>moderated by hand</div>
+      </div>
+      <div class="block">
+        <div class="heading">stats</div>
+        <div class="body" style="color: var(--accent); font-size: 18px;">{totalCount}</div>
+        <div>entries since 2018</div>
+      </div>
+      <div class="block">
+        <div class="heading">quiet but ok?</div>
+        <div>email is also fine —<br/><a style="color: var(--accent);" href="/contact">/contact</a></div>
+      </div>
+    </Sidebar>
   </main>
 </Base>
-
-<style>
-  .page {
-    max-width: 760px;
-    margin: 0 auto;
-    padding: 28px 40px 36px;
-  }
-
-  @media (max-width: 640px) {
-    .page { padding: 20px 20px 28px; }
-  }
-</style>

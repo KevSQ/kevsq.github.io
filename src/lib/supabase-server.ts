@@ -5,6 +5,7 @@ export interface GuestbookEntry {
   name: string;
   message: string;
   created_at: string;
+  location?: string;
 }
 
 export function getSupabaseServer() {
@@ -19,7 +20,7 @@ export async function fetchGuestbookEntries(limit: number): Promise<GuestbookEnt
   if (!client) return [];
   const { data } = await client
     .from('guestbook')
-    .select('id, name, message, created_at')
+    .select('id, name, message, created_at, location')
     .order('created_at', { ascending: false })
     .limit(limit);
   return data ?? [];

@@ -1,108 +1,114 @@
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
-
-interface Entry {
-  id: number;
-  name: string;
-  message: string;
-  created_at: string;
-}
+import type { GuestbookEntry } from '../lib/supabase-server';
 
 interface Props {
-  initialEntries: Entry[];
+  initialEntries: GuestbookEntry[];
 }
 
-function formatAge(iso: string): string {
-  const days = Math.floor((Date.now() - new Date(iso).valueOf()) / 86_400_000);
-  if (days < 1)  return 'today';
-  if (days === 1) return '1d';
-  if (days < 7)  return `${days}d`;
-  if (days < 30) return `${Math.floor(days / 7)}w`;
-  return `${Math.floor(days / 30)}mo`;
+function relativeTime(iso: string): string {
+  const days = Math.floor((Date.now() - new Date(iso).getTime()) / 86_400_000);
+  if (days < 1) return 'today';
+  if (days === 1) return '1 day ago';
+  if (days < 7) return `${days} days ago`;
+  const wk = Math.floor(days / 7);
+  if (wk === 1) return '1 week ago';
+  if (wk < 5) return `${wk} weeks ago`;
+  const mo = Math.floor(days / 30);
+  return mo === 1 ? '1 month ago' : `${mo} months ago`;
 }
 
 export default function GuestbookForm({ initialEntries }: Props) {
-  const [entries, setEntries]   = useState<Entry[]>(initialEntries);
   const [name, setName]         = useState('');
+  const [location, setLocation] = useState('');
   const [message, setMessage]   = useState('');
-  const [status, setStatus]     = useState<'idle' | 'sending' | 'done' | 'error'>('idle');
+  const [status, setStatus]     = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (!name.trim() || !message.trim()) return;
     setStatus('sending');
-    const { data, error } = await supabase
-      .from('guestbook')
-      .insert({ name: name.trim(), message: message.trim() })
-      .select()
-      .single();
-    if (error) {
-      setStatus('error');
-      return;
-    }
-    setEntries([data, ...entries]);
+    const { error } = await supabase.from('guestbook').insert({
+      name: name.trim(),
+      message: message.trim(),
+      location: location.trim() || null,
+    });
+    if (error) { setStatus('error'); return; }
+    setStatus('sent');
     setName('');
+    setLocation('');
     setMessage('');
-    setStatus('done');
-    setTimeout(() => setStatus('idle'), 3000);
   }
 
   return (
-    <div>
-      <div className="gb-section-label">❦ leave a note</div>
-      <form onSubmit={handleSubmit} className="gb-form">
-        <div className="gb-field">
-          <label className="gb-field-label">name</label>
-          <input type="text" value={name} onChange={e => setName(e.target.value)}
-            maxLength={50} required className="gb-input" placeholder="your name" />
+    <>
+      <div className="label">✎ leave a note</div>
+      <form className="gb-form" onSubmit={handleSubmit}>
+        <div className="row">
+          <div className="field">
+            <label htmlFor="gb-name">your name (or a handle)</label>
+            <input
+              id="gb-name"
+              type="text"
+              placeholder="e.g. mira"
+              value={name}
+              onChange={e => setName(e.target.value)}
+              maxLength={80}
+              required
+            />
+          </div>
+          <div className="field">
+            <label htmlFor="gb-where">
+              where you're writing from{' '}
+              <span style={{ color: 'var(--dim)', textTransform: 'none', letterSpacing: 0 }}>
+                (optional)
+              </span>
+            </label>
+            <input
+              id="gb-where"
+              type="text"
+              placeholder="e.g. brooklyn, ny"
+              value={location}
+              onChange={e => setLocation(e.target.value)}
+              maxLength={80}
+            />
+          </div>
         </div>
-        <div className="gb-field">
-          <label className="gb-field-label">message</label>
-          <textarea value={message} onChange={e => setMessage(e.target.value)}
-            maxLength={280} required rows={3} className="gb-input gb-textarea" placeholder="say something" />
+        <div className="field">
+          <label htmlFor="gb-msg">your note</label>
+          <textarea
+            id="gb-msg"
+            placeholder="say hi…"
+            value={message}
+            onChange={e => setMessage(e.target.value)}
+            maxLength={280}
+            required
+          />
         </div>
-        <div className="gb-form-footer">
-          <button type="submit" disabled={status === 'sending'} className="gb-button">
-            {status === 'sending' ? 'sending...' : '+ sign →'}
+        <div className="actions">
+          <span className="hint">
+            {status === 'sending' && 'sending…'}
+            {status === 'sent'    && "left! it'll appear after moderation."}
+            {status === 'error'   && 'something went wrong — try again.'}
+            {status === 'idle'    && '280 chars · plain text · moderated by hand'}
+          </span>
+          <button className="btn" type="submit" disabled={status === 'sending'}>
+            {status === 'sending' ? 'sending…' : 'leave the note ↗'}
           </button>
-          {status === 'done'  && <span className="gb-success">signed!</span>}
-          {status === 'error' && <span className="gb-error">something went wrong — try again</span>}
         </div>
       </form>
 
-      <div className="gb-section-label gb-entries-label">❦ notes from readers</div>
-
-      {entries.length === 0 && (
-        <p className="gb-empty">no entries yet — be the first</p>
-      )}
-
-      {entries.map(entry => (
-        <div key={entry.id} className="gb-entry">
-          <div className="gb-quote">"{entry.message}"</div>
-          <div className="gb-author">— {entry.name} · {formatAge(entry.created_at)}</div>
+      <div className="label">❦ recent entries</div>
+      {initialEntries.map((entry, i) => (
+        <div key={entry.id} className={i === 0 ? 'entry featured' : 'entry'}>
+          <p className="msg">{entry.message}</p>
+          <div className="sig">
+            <span className="who">— {entry.name}</span>
+            {entry.location && <span className="where">{entry.location}</span>}
+            <span>· {relativeTime(entry.created_at)}</span>
+          </div>
         </div>
       ))}
-
-      <style>{`
-        .gb-section-label { font-family: var(--mono); font-size: 10.5px; color: var(--dim); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; }
-        .gb-form { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
-        .gb-field { display: flex; flex-direction: column; gap: 4px; }
-        .gb-field-label { font-family: var(--mono); font-size: 10px; color: var(--dim); text-transform: uppercase; letter-spacing: 1px; }
-        .gb-input { background: var(--panel); border: 1px solid var(--border); color: var(--fg); font-family: var(--serif); font-size: 14px; padding: 6px 8px; outline: none; width: 100%; }
-        .gb-input:focus { border-color: var(--accent); }
-        .gb-textarea { resize: vertical; }
-        .gb-form-footer { display: flex; align-items: center; gap: 12px; }
-        .gb-button { font-family: var(--mono); font-size: 11px; color: var(--accent); background: none; border: 1px solid var(--accent); padding: 6px 14px; cursor: pointer; }
-        .gb-button:hover:not(:disabled) { background: var(--panel); }
-        .gb-button:disabled { opacity: 0.5; cursor: default; }
-        .gb-success { font-family: var(--mono); font-size: 11px; color: var(--moss); }
-        .gb-error { font-family: var(--mono); font-size: 11px; color: var(--terra); }
-        .gb-entries-label { margin-top: 0; }
-        .gb-entry { padding: 10px 0; border-bottom: 1px dashed var(--border); }
-        .gb-entry:last-child { border-bottom: none; }
-        .gb-quote { font-family: var(--hand); color: var(--fg); font-size: 15px; line-height: 1.4; overflow-wrap: break-word; }
-        .gb-author { font-family: var(--mono); font-size: 10.5px; color: var(--dim); margin-top: 4px; }
-        .gb-empty { font-family: var(--mono); font-size: 11px; color: var(--dim); margin: 0 0 28px; }
-      `}</style>
-    </div>
+    </>
   );
 }
