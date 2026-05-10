@@ -5,6 +5,10 @@ import SlashNav from '../components/SlashNav.astro';
 import Sidebar from '../components/Sidebar.astro';
 import { getCollection } from 'astro:content';
 import { fetchGuestbookEntries } from '../lib/supabase-server';
+import WritingCard from '../components/WritingCard.astro';
+import { nowItems } from '../data/now';
+import { profile } from '../data/profile';
+import { statusLabel } from '../lib/writing';
 
 const posts = (await getCollection('writing'))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
@@ -22,6 +26,7 @@ function tendedLabel(date: Date): string {
   return `tended ${Math.floor(days / 30)} months ago`;
 }
 ---
+
 <Base>
   <main class="page">
     <article>
@@ -35,29 +40,25 @@ function tendedLabel(date: Date): string {
       <div class="label">❦ recently tended</div>
 
       {posts.map(post => (
-        <div class="post">
-          <div class="row">
-            <a class="title-link" href={`/writing/${post.id.replace(/\.mdx?$/, '')}`}>{post.data.title}</a>
-            <span class="age">
-              {post.data.status === 'budding' ? '🌱 budding' : '🌳 evergreen'}
-            </span>
-          </div>
-          <div class="meta">{tendedLabel(post.data.date)}</div>
-        </div>
+        <WritingCard
+          post={post}
+          label={tendedLabel(post.data.date)}
+          statusLabel={statusLabel(post.data.status)}
+        />
       ))}
 
       <div class="label gardener-label">❦ from the gardener</div>
-      <p class="gardener">
-        I'm Kevin, a Brooklyn-based software engineer focused on backend
-        systems. I write here about the craft, the tools, and what I'm
-        learning. Recruiters welcome — clean PDF resume one click away.
-      </p>
+      <p class="gardener">{profile.shortBio}</p>
     </article>
 
     <Sidebar>
       <div class="block">
         <div class="heading">now</div>
-        <div class="body">📖 doing science<br/>🛠 feed reader<br/>🌱 ocaml</div>
+        <div class="body">
+          {nowItems.map((item, i) => (
+            <>{item}{i < nowItems.length - 1 && <br />}</>
+          ))}
+        </div>
       </div>
       <div class="block">
         <div class="heading">✎ guestbook</div>
@@ -119,41 +120,6 @@ function tendedLabel(date: Date): string {
   }
   .gardener-label {
     margin: 22px 0 8px;
-  }
-
-  .post {
-    padding: 10px 0;
-    border-bottom: 1px dashed var(--border);
-  }
-  .post:last-of-type {
-    border-bottom: none;
-  }
-  .post .row {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 10px;
-  }
-  .post a.title-link {
-    font-family: var(--serif);
-    font-size: 16.5px;
-    color: var(--fg);
-    text-decoration: underline var(--accent);
-    text-underline-offset: 4px;
-    text-decoration-thickness: 1px;
-    font-style: italic;
-  }
-  .post .age {
-    font-family: var(--mono);
-    font-size: 10.5px;
-    color: var(--dim);
-    white-space: nowrap;
-  }
-  .post .meta {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--dim);
-    margin-top: 2px;
   }
 
   .gardener {

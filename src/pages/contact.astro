@@ -3,34 +3,10 @@ import Base from '../layouts/Base.astro';
 import Eyebrow from '../components/Eyebrow.astro';
 import SlashNav from '../components/SlashNav.astro';
 import Sidebar from '../components/Sidebar.astro';
-
-const channels = [
-  {
-    key: 'email',
-    val: 'kevinxmedina@gmail.com',
-    href: 'mailto:kevinxmedina@gmail.com',
-    note: 'best for anything that needs more than a sentence',
-  },
-  {
-    key: 'github',
-    val: 'github.com/kevsq',
-    href: 'https://github.com/kevsq',
-    note: 'issues & PRs · open source',
-  },
-  {
-    key: 'guestbook',
-    val: '/guestbook',
-    href: '/guestbook',
-    note: 'a public note · 280 chars',
-  },
-  {
-    key: 'rss',
-    val: '/feed.xml',
-    href: '/feed.xml',
-    note: 'to listen, not to talk',
-  },
-];
+import { channels } from '../data/contact';
+import { profile } from '../data/profile';
 ---
+
 <Base title="Contact — Kevin's Field Journal">
   <main class="page">
     <article>
@@ -67,12 +43,6 @@ const channels = [
           I check email a couple of times a week and try not to let it run my schedule.
         </p>
       </div>
-
-      <div class="pgp">
-        <div class="pgp-head">PGP · for the curious</div>
-        4E2A B193 F84D 3C9A 7B6E · 1D04 82C3 A057 9F1B 2E48<br/>
-        <a href="https://keys.openpgp.org" style="color: var(--accent);">keys.openpgp.org</a>
-      </div>
     </article>
 
     <Sidebar>
@@ -83,7 +53,7 @@ const channels = [
       <div class="block">
         <div class="heading">availability</div>
         <div class="body" style="color: var(--moss);">● open to roles</div>
-        <div>staff / senior backend<br/>remote or nyc</div>
+        <div>{profile.targetRoles}<br/>{profile.locationAlt}</div>
       </div>
       <div class="block">
         <div class="heading">no thanks</div>

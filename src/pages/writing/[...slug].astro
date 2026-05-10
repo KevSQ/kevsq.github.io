@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import SlashNav from '../../components/SlashNav.astro';
 import { getCollection, render } from 'astro:content';
+import { statusLabel } from '../../lib/writing';
 
 export async function getStaticPaths() {
   const posts = await getCollection('writing');
@@ -20,7 +21,7 @@ const { Content } = await render(post);
       <SlashNav active="/writing" />
       <h1 class="post-title">{post.data.title}</h1>
       <div class="post-meta">
-        <span>{post.data.status === 'budding' ? '🌱 budding' : '🌳 evergreen'}</span>
+        <span>{statusLabel(post.data.status)}</span>
         <span>·</span>
         <span>
           {post.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}

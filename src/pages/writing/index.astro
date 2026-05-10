@@ -2,6 +2,8 @@
 import Base from '../../layouts/Base.astro';
 import SlashNav from '../../components/SlashNav.astro';
 import { getCollection } from 'astro:content';
+import WritingCard from '../../components/WritingCard.astro';
+import { statusLabel } from '../../lib/writing';
 
 const posts = (await getCollection('writing'))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
@@ -12,17 +14,11 @@ const posts = (await getCollection('writing'))
       <SlashNav active="/writing" />
       <div class="label">❦ all writing</div>
       {posts.map(post => (
-        <div class="post">
-          <div class="row">
-            <a class="title-link" href={`/writing/${post.id.replace(/\.mdx?$/, '')}`}>{post.data.title}</a>
-            <span class="age">
-              {post.data.status === 'budding' ? '🌱 budding' : '🌳 evergreen'}
-            </span>
-          </div>
-          <div class="meta">
-            {post.data.date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
-          </div>
-        </div>
+        <WritingCard
+          post={post}
+          label={post.data.date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+          statusLabel={statusLabel(post.data.status)}
+        />
       ))}
     </article>
   </main>
@@ -31,13 +27,6 @@ const posts = (await getCollection('writing'))
 <style>
   .page  { max-width: 760px; margin: 0 auto; padding: 28px 40px 36px; }
   .label { font-family: var(--mono); font-size: 10.5px; color: var(--dim); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px; }
-  .post  { padding: 10px 0; border-bottom: 1px dashed var(--border); }
-  .post:last-of-type { border-bottom: none; }
-  .post .row { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
-  .post a.title-link { font-family: var(--serif); font-size: 16.5px; color: var(--fg); text-decoration: underline var(--accent); text-underline-offset: 4px; text-decoration-thickness: 1px; font-style: italic; }
-  .post .age  { font-family: var(--mono); font-size: 10.5px; color: var(--dim); white-space: nowrap; }
-  .post .meta { font-family: var(--mono); font-size: 11px; color: var(--dim); margin-top: 2px; }
-
   @media (max-width: 640px) {
     .page { padding: 20px 20px 28px; }
   }

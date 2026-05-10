@@ -3,71 +3,8 @@ import Base from '../layouts/Base.astro';
 import Eyebrow from '../components/Eyebrow.astro';
 import SlashNav from '../components/SlashNav.astro';
 import Sidebar from '../components/Sidebar.astro';
-
-interface Project {
-  name: string;
-  href: string;
-  role: string;
-  blurb: string;
-  pills: string[];
-  stack: string;
-  stars?: string;
-}
-
-const atWork: Project[] = [
-  {
-    name: 'Lattice Storage',
-    href: '#',
-    role: 'staff eng · 2023–now',
-    blurb: 'Distributed object store backing internal analytics pipelines. Designed the replication protocol, led the migration from a third-party blob store, and cut storage costs by ~40%.',
-    pills: ['scale', 'consensus'],
-    stack: 'go · raft · postgres · kafka',
-  },
-  {
-    name: 'Quicksilver Queue',
-    href: '#',
-    role: 'senior eng · 2021–23',
-    blurb: 'Internal job queue with strict ordering guarantees for financial transactions. Replaced a brittle cron-based system; zero missed jobs in 18 months of production.',
-    pills: ['queues', 'migration'],
-    stack: 'rust · redis · postgres',
-  },
-];
-
-const sideProjects: Project[] = [
-  {
-    name: 'sift',
-    href: 'https://github.com/kevsq/sift',
-    role: 'solo · 2024',
-    blurb: "A tiny log-search CLI that understands structured JSON logs without a schema. Pipe it anything; it figures out the shape and lets you query in plain English.",
-    pills: ['cli', 'small'],
-    stack: 'go',
-    stars: '1.4k ★',
-  },
-  {
-    name: 'tinyq',
-    href: 'https://github.com/kevsq/tinyq',
-    role: 'solo · 2023',
-    blurb: "Embedded job queue for SQLite. No separate process, no network, no infra. Drop a Go package in and you have reliable background jobs in under five minutes.",
-    pills: ['embedded'],
-    stack: 'go · sqlite',
-    stars: '612 ★',
-  },
-  {
-    name: 'bookmark.land',
-    href: 'https://github.com/kevsq/bookmark.land',
-    role: 'solo · ongoing',
-    blurb: 'A link garden — personal bookmarking tool that keeps URLs alive with snapshots and lets me tag and search them locally. Slow web philosophy.',
-    pills: ['slow web'],
-    stack: 'elixir · litefs',
-  },
-];
-
-const archive = [
-  { label: '2020 · Hearth Notify', href: '#' },
-  { label: '2019 · plot.sh',       href: '#' },
-  { label: '2018 · meridian',      href: '#' },
-  { label: '2017 · paper-trail',   href: '#' },
-];
+import ProjectCard from '../components/ProjectCard.astro';
+import { atWork, sideProjects, archive, sidebarStats } from '../data/work';
 ---
 <Base title="Work — Kevin's Field Journal">
   <main class="page">
@@ -79,38 +16,12 @@ const archive = [
 
       <div class="label">❦ at work</div>
       <div class="project-list">
-        {atWork.map(p => (
-          <div class="project">
-            <div class="head">
-              <a class="name" href={p.href}>{p.name}</a>
-              <span class="role-tag">{p.role}</span>
-            </div>
-            <p class="blurb">{p.blurb}</p>
-            <div class="tags">
-              {p.pills.map(pill => <span class="pill">{pill}</span>)}
-              <span class="stack">{p.stack}</span>
-              {p.stars && <span style="margin-left: 8px; color: var(--accent);">{p.stars}</span>}
-            </div>
-          </div>
-        ))}
+        {atWork.map(p => <ProjectCard project={p} />)}
       </div>
 
       <div class="label" style="margin-top: 24px;">❦ side projects</div>
       <div class="project-list">
-        {sideProjects.map(p => (
-          <div class="project">
-            <div class="head">
-              <a class="name" href={p.href}>{p.name}</a>
-              <span class="role-tag">{p.role}</span>
-            </div>
-            <p class="blurb">{p.blurb}</p>
-            <div class="tags">
-              {p.pills.map(pill => <span class="pill">{pill}</span>)}
-              <span class="stack">{p.stack}</span>
-              {p.stars && <span style="margin-left: 8px; color: var(--accent);">{p.stars}</span>}
-            </div>
-          </div>
-        ))}
+        {sideProjects.map(p => <ProjectCard project={p} />)}
       </div>
 
       <div class="divider-label">❦ archive</div>
@@ -127,76 +38,21 @@ const archive = [
     <Sidebar>
       <div class="block">
         <div class="heading">tools of choice</div>
-        <div>go · rust · ts<br/>postgres · redis<br/>linux · vim · tmux</div>
+        <div>
+          {sidebarStats.tools.map((t, i) => (
+            <>{t}{i < sidebarStats.tools.length - 1 && <br />}</>
+          ))}
+        </div>
       </div>
       <div class="block">
         <div class="heading">commits this yr</div>
-        <div class="body" style="color: var(--accent); font-size: 18px;">1,284</div>
-        <div>across 9 repos</div>
+        <div class="body" style="color: var(--accent); font-size: 18px;">{sidebarStats.commits.toLocaleString()}</div>
+        <div>across {sidebarStats.repoCount} repos</div>
       </div>
       <div class="block">
         <div class="heading">on github</div>
-        <div><a href="https://github.com/kevsq" style="color: var(--accent);">github.com/kevsq</a></div>
+        <div><a href={sidebarStats.githubUrl} style="color: var(--accent);">{sidebarStats.githubUrl}</a></div>
       </div>
     </Sidebar>
   </main>
 </Base>
-
-<style>
-  .project {
-    padding: 14px 0;
-    border-bottom: 1px dashed var(--border);
-  }
-  .project:last-child { border-bottom: none; }
-
-  .head {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 10px;
-  }
-
-  .name {
-    font-family: var(--serif);
-    font-size: 18px;
-    color: var(--fg);
-    font-style: italic;
-    text-decoration: underline var(--accent);
-    text-underline-offset: 4px;
-    text-decoration-thickness: 1px;
-  }
-  .name:hover { text-decoration-thickness: 2px; }
-
-  .role-tag {
-    font-family: var(--mono);
-    font-size: 10.5px;
-    color: var(--dim);
-    white-space: nowrap;
-  }
-
-  .blurb {
-    font-size: 14px;
-    line-height: 1.6;
-    color: var(--fg);
-    margin: 6px 0;
-    max-width: 56ch;
-  }
-
-  .tags {
-    font-family: var(--mono);
-    font-size: 10.5px;
-    color: var(--dim);
-  }
-
-  .stack { color: var(--moss); }
-
-  .pill {
-    display: inline-block;
-    background: rgba(212, 163, 115, 0.08);
-    border: 1px solid var(--border);
-    padding: 1px 6px;
-    margin-right: 4px;
-    color: var(--dim);
-    font-size: 10px;
-  }
-</style>

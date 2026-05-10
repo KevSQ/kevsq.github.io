@@ -41,8 +41,7 @@ export default function GuestbookForm({ initialEntries }: Props) {
     <>
       <div className="label">✎ leave a note</div>
       <form className="gb-form" onSubmit={handleGuestbookSubmit}>
-        <div className="row">
-          <div className="field">
+        <div className="field">
             <label htmlFor="gb-name">your name (or a handle)</label>
             <input
               id="gb-name"
@@ -50,10 +49,9 @@ export default function GuestbookForm({ initialEntries }: Props) {
               placeholder="e.g. mira"
               value={name}
               onChange={e => setName(e.target.value)}
-              maxLength={80}
+              maxLength={40}
               required
             />
-          </div>
         </div>
         <div className="field">
           <label htmlFor="gb-msg">your note</label>
@@ -69,7 +67,7 @@ export default function GuestbookForm({ initialEntries }: Props) {
         <div className="actions">
           <span className="hint">
             {status === 'sending' && 'sending…'}
-            {status === 'sent'    && "left! it'll appear after moderation."}
+            {status === 'sent'    && "sent!"}
             {status === 'error'   && 'something went wrong — try again.'}
             {status === 'idle'    && '280 chars · plain text · moderated by hand'}
           </span>
@@ -78,12 +76,11 @@ export default function GuestbookForm({ initialEntries }: Props) {
           </button>
         </div>
       </form>
-
       <div className="label">❦ recent entries</div>
       {initialEntries.map((entry, i) => (
-        <div key={entry.id} className={i === 0 ? 'entry featured' : 'entry'}>
+        <div key={entry.id} className={'entry'}>
           <p className="msg">{entry.message}</p>
-          <div className="sig"> {/* TODO: Adjust the spacing between the two spans. */}
+          <div className="sig">
             <span className="who">— {entry.name}</span>
             <span>· {relativeTime(entry.created_at)}</span>
           </div>

@@ -118,6 +118,12 @@ h1.title em {
 }
 .prose a:hover { text-decoration-thickness: 2px; }
 
+/* ─── Article ─────────────────────────────────────── */
+article {
+  max-width: 100%;
+  min-width: 0; 
+}
+
 /* ─── Sidebar ─────────────────────────────────────── */
 aside {
   font-family: var(--mono);
@@ -173,7 +179,6 @@ aside .block .body {
   padding: 8px 10px;
   border-radius: 0;
   outline: none;
-  box-sizing: border-box;
 }
 .field input:focus,
 .field textarea:focus {
@@ -231,7 +236,6 @@ aside .block .body {
 .entry {
   padding: 14px 0;
   border-bottom: 1px dashed var(--border);
-  max-width: 56ch;
 }
 .entry:last-of-type { border-bottom: none; }
 .entry .msg {
@@ -240,6 +244,8 @@ aside .block .body {
   line-height: 1.4;
   color: var(--fg);
   margin: 0 0 6px;
+  max-width: 56ch;
+  overflow-wrap: break-word;
 }
 .entry .msg::before { content: '\201C'; color: var(--accent); }
 .entry .msg::after  { content: '\201D'; color: var(--accent); }
@@ -248,7 +254,7 @@ aside .block .body {
   font-size: 11px;
   color: var(--dim);
   display: flex;
-  gap: 12px;
+  gap: 6px;
   align-items: baseline;
   flex-wrap: wrap;
 }

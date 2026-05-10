@@ -1,0 +1,79 @@
+---
+import type { Project } from '../data/work';
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+---
+<div class="project">
+  <div class="head">
+    <a class="name" href={project.href}>{project.name}</a>
+    <span class="role-tag">{project.role}</span>
+  </div>
+  <p class="blurb">{project.blurb}</p>
+  <div class="tags">
+    {project.pills.map(pill => <span class="pill">{pill}</span>)}
+    <span class="stack">{project.stack}</span>
+    {project.kind === 'side' && project.stars && (
+      <span style="margin-left: 8px; color: var(--accent);">{project.stars}</span>
+    )}
+  </div>
+</div>
+
+<style>
+  .project { padding: 14px 0; border-bottom: 1px dashed var(--border); }
+  .project:last-child { border-bottom: none; }
+
+  .head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .name {
+    font-family: var(--serif);
+    font-size: 18px;
+    color: var(--fg);
+    font-style: italic;
+    text-decoration: underline var(--accent);
+    text-underline-offset: 4px;
+    text-decoration-thickness: 1px;
+  }
+  .name:hover { text-decoration-thickness: 2px; }
+
+  .role-tag {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--dim);
+    white-space: nowrap;
+  }
+
+  .blurb {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--fg);
+    margin: 6px 0;
+    max-width: 56ch;
+  }
+
+  .tags {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--dim);
+  }
+
+  .stack { color: var(--moss); }
+
+  .pill {
+    display: inline-block;
+    background: rgba(212, 163, 115, 0.08);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    margin-right: 4px;
+    color: var(--dim);
+    font-size: 10px;
+  }
+</style>

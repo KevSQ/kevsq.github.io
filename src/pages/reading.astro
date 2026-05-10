@@ -3,66 +3,8 @@ import Base from '../layouts/Base.astro';
 import Eyebrow from '../components/Eyebrow.astro';
 import SlashNav from '../components/SlashNav.astro';
 import Sidebar from '../components/Sidebar.astro';
-
-type CoverVariant = 'brass' | 'moss' | 'terra' | 'sky' | 'ink';
-
-interface Book {
-  title: string;
-  author: string;
-  cover: CoverVariant;
-  note?: string;
-  status: string;
-  stars?: string;
-}
-
-const nightstand: Book[] = [
-  {
-    title: 'Doing Science & Engineering',
-    author: 'Richard Hamming',
-    cover: 'brass',
-    note: "A collection of Hamming's lectures on how to do great work. Surprisingly practical.",
-    status: '📖 in progress',
-  },
-  {
-    title: 'Designing Data-Intensive Applications',
-    author: 'Martin Kleppmann',
-    cover: 'moss',
-    note: 'Re-reading for the third time. Different things jump out every time.',
-    status: '🔁 re-reading',
-  },
-  {
-    title: 'Real World OCaml',
-    author: 'Minsky, Madhavapeddy & Hickey',
-    cover: 'ink',
-    status: '🌱 learning',
-  },
-];
-
-const recentlyFinished: Book[] = [
-  {
-    title: 'A Philosophy of Software Design',
-    author: 'John Ousterhout',
-    cover: 'terra',
-    note: 'Short, opinionated, and correct about most things. Should be required reading.',
-    status: "apr '26",
-    stars: '★ ★ ★ ★ ★',
-  },
-  {
-    title: 'The Soul of a New Machine',
-    author: 'Tracy Kidder',
-    cover: 'sky',
-    note: 'Reads like a thriller. The minicomputer era was something else.',
-    status: "mar '26",
-    stars: '★ ★ ★ ★ ☆',
-  },
-  {
-    title: 'Piranesi',
-    author: 'Susanna Clarke',
-    cover: 'ink',
-    status: "feb '26",
-    stars: '★ ★ ★ ★ ★',
-  },
-];
+import BookCard from '../components/BookCard.astro';
+import { nightstand, recentlyFinished, queue, booksReadThisYear } from '../data/books';
 ---
 <Base title="Reading — Kevin's Field Journal">
   <main class="page">
@@ -73,57 +15,34 @@ const recentlyFinished: Book[] = [
       <SlashNav active="/reading" />
 
       <div class="stat-line">
-        <span><strong>14</strong> read this year</span>
-        <span><strong>3</strong> on the nightstand</span>
-        <span><strong>27</strong> in the queue</span>
+        <span><strong>{booksReadThisYear}</strong> read this year</span>
+        <span><strong>{nightstand.length}</strong> on the nightstand</span>
+        <span><strong>{queue.length}+</strong> in the queue</span>
       </div>
 
       <div class="label">❦ on the nightstand</div>
-      {nightstand.map(book => (
-        <div class="book">
-          <div class={`cover ${book.cover}`}><div class="spine"></div></div>
-          <div class="meta">
-            <div class="book-title">{book.title}</div>
-            <div class="author">{book.author}</div>
-            {book.note && <div class="note">{book.note}</div>}
-          </div>
-          <div class="right">
-            {book.status}
-            {book.stars && <><br/><span class="stars">{book.stars}</span></>}
-          </div>
-        </div>
-      ))}
+      {nightstand.map(book => <BookCard book={book} />)}
 
       <div class="label" style="margin-top: 24px;">❦ recently finished</div>
-      {recentlyFinished.map(book => (
-        <div class="book">
-          <div class={`cover ${book.cover}`}><div class="spine"></div></div>
-          <div class="meta">
-            <div class="book-title">{book.title}</div>
-            <div class="author">{book.author}</div>
-            {book.note && <div class="note">{book.note}</div>}
-          </div>
-          <div class="right">
-            {book.status}
-            {book.stars && <><br/><span class="stars">{book.stars}</span></>}
-          </div>
-        </div>
-      ))}
+      {recentlyFinished.map(book => <BookCard book={book} />)}
 
       <div class="divider-label">❦ on the queue</div>
       <p class="prose" style="color: var(--dim); font-size: 13.5px;">
-        <em>Operating Systems: Three Easy Pieces</em> · <em>The Pragmatic Programmer</em> ·
-        <em>Structure and Interpretation of Computer Programs</em> · <em>Gödel, Escher, Bach</em> ·
-        <em>The Art of Doing Science and Engineering</em> and about twenty-three more.
-        The queue always grows faster than I read.
+        {queue.map((title, i) => (
+          <>
+            {i > 0 && ' · '}
+            <em>{title}</em>
+          </>
+        ))}
+        {' '}and more. The queue always grows faster than I read.
       </p>
     </article>
 
     <Sidebar>
       <div class="block">
         <div class="heading">this year</div>
-        <div class="body" style="color: var(--accent); font-size: 18px;">14 / 24</div>
-        <div>books · on pace</div>
+        <div class="body" style="color: var(--accent); font-size: 18px;">{booksReadThisYear}</div>
+        <div>books read</div>
       </div>
       <div class="block">
         <div class="heading">key</div>
@@ -153,70 +72,5 @@ const recentlyFinished: Book[] = [
   .stat-line strong {
     color: var(--accent);
     font-weight: 500;
-  }
-
-  .book {
-    display: grid;
-    grid-template-columns: 44px 1fr auto;
-    gap: 14px;
-    padding: 12px 0;
-    border-bottom: 1px dashed var(--border);
-    align-items: start;
-  }
-  .book:last-of-type { border-bottom: none; }
-
-  .cover {
-    width: 44px;
-    height: 64px;
-    background: var(--panel);
-    border: 1px solid var(--border);
-    position: relative;
-    flex-shrink: 0;
-  }
-  .cover.brass { background: linear-gradient(170deg, #5a4530 0%, #3a2c1c 100%); border-color: var(--accent); }
-  .cover.moss  { background: linear-gradient(170deg, #3a4a2c 0%, #1f2a18 100%); border-color: var(--moss); }
-  .cover.terra { background: linear-gradient(170deg, #5a3325 0%, #2e1c14 100%); border-color: var(--terra); }
-  .cover.sky   { background: linear-gradient(170deg, #2c4a55 0%, #14252c 100%); border-color: var(--sky); }
-  .cover.ink   { background: linear-gradient(170deg, #2a2520 0%, #14110d 100%); border-color: var(--border); }
-
-  .spine {
-    position: absolute;
-    left: 6px;
-    top: 0;
-    bottom: 0;
-    width: 1px;
-    background: rgba(255, 255, 255, 0.08);
-  }
-
-  .book-title {
-    font-family: var(--serif);
-    font-size: 15.5px;
-    color: var(--fg);
-    font-style: italic;
-    line-height: 1.25;
-  }
-  .author {
-    font-family: var(--mono);
-    font-size: 10.5px;
-    color: var(--dim);
-    margin-top: 3px;
-  }
-  .note {
-    font-size: 13px;
-    color: var(--fg);
-    margin-top: 5px;
-    line-height: 1.5;
-    max-width: 48ch;
-  }
-  .right {
-    font-family: var(--mono);
-    font-size: 10.5px;
-    color: var(--dim);
-    white-space: nowrap;
-    text-align: right;
-  }
-  .stars {
-    color: var(--accent);
-    font-size: 11px;
   }
 </style>

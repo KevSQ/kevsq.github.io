@@ -9,6 +9,7 @@ const { sub: subOverride } = Astro.props;
 const { vol, sub: autoSub } = getEyebrow();
 const sub = subOverride ?? autoSub;
 ---
+
 <div class="eyebrow">
   <span>{vol} ·</span>
   <span class="dim">{sub}</span>

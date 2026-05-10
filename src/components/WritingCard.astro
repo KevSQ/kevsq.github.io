@@ -1,0 +1,28 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  post: CollectionEntry<'writing'>;
+  label: string;
+  statusLabel: string;
+}
+
+const { post, label, statusLabel } = Astro.props;
+const href = `/writing/${post.id.replace(/\.mdx?$/, '')}`;
+---
+<div class="post">
+  <div class="row">
+    <a class="title-link" href={href}>{post.data.title}</a>
+    <span class="age">{statusLabel}</span>
+  </div>
+  <div class="meta">{label}</div>
+</div>
+
+<style>
+  .post { padding: 10px 0; border-bottom: 1px dashed var(--border); }
+  .post:last-of-type { border-bottom: none; }
+  .post .row { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+  .post a.title-link { font-family: var(--serif); font-size: 16.5px; color: var(--fg); text-decoration: underline var(--accent); text-underline-offset: 4px; text-decoration-thickness: 1px; font-style: italic; }
+  .post .age { font-family: var(--mono); font-size: 10.5px; color: var(--dim); white-space: nowrap; }
+  .post .meta { font-family: var(--mono); font-size: 11px; color: var(--dim); margin-top: 2px; }
+</style>

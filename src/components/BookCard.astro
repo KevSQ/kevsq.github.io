@@ -1,0 +1,109 @@
+---
+import type { Book } from '../data/books';
+
+interface Props {
+  book: Book;
+}
+
+const { book } = Astro.props;
+---
+
+<div class="book">
+  <div class={`cover ${book.cover}`}>
+    {book.image
+      ? <img src={book.image} alt={book.title} class="cover-img" />
+      : <div class="spine"></div>
+    }
+  </div>
+  <div class="meta">
+    <div class="book-title">{book.title}</div>
+    <div class="author">{book.author}</div>
+    {book.note && <div class="note">{book.note}</div>}
+  </div>
+  <div class="right">
+    {book.section === 'nightstand'
+      ? book.status
+      : (
+        <>
+          {book.finishedMonth}
+          {book.stars && <><br /><span class="stars">{book.stars}</span></>}
+        </>
+      )
+    }
+  </div>
+</div>
+
+<style>
+  .book {
+    display: grid;
+    grid-template-columns: 44px 1fr auto;
+    gap: 14px;
+    padding: 12px 0;
+    border-bottom: 1px dashed var(--border);
+    align-items: start;
+  }
+  .book:last-of-type { border-bottom: none; }
+
+  .cover {
+    width: 44px;
+    height: 64px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    position: relative;
+    flex-shrink: 0;
+  }
+  .cover.brass { background: linear-gradient(170deg, #5a4530 0%, #3a2c1c 100%); border-color: var(--accent); }
+  .cover.moss  { background: linear-gradient(170deg, #3a4a2c 0%, #1f2a18 100%); border-color: var(--moss); }
+  .cover.terra { background: linear-gradient(170deg, #5a3325 0%, #2e1c14 100%); border-color: var(--terra); }
+  .cover.sky   { background: linear-gradient(170deg, #2c4a55 0%, #14252c 100%); border-color: var(--sky); }
+  .cover.ink   { background: linear-gradient(170deg, #2a2520 0%, #14110d 100%); border-color: var(--border); }
+
+  .cover-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
+  .spine {
+    position: absolute;
+    left: 6px;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .book-title {
+    font-family: var(--serif);
+    font-size: 15.5px;
+    color: var(--fg);
+    font-style: italic;
+    line-height: 1.25;
+  }
+  .author {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--dim);
+    margin-top: 3px;
+  }
+  .note {
+    font-size: 13px;
+    color: var(--fg);
+    margin-top: 5px;
+    line-height: 1.5;
+    max-width: 48ch;
+  }
+  .right {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--dim);
+    white-space: nowrap;
+    text-align: right;
+  }
+  .stars {
+    color: var(--accent);
+    font-size: 11px;
+  }
+</style>
