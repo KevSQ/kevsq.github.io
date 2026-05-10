@@ -1,19 +1,158 @@
 ---
 import Base from '../layouts/Base.astro';
+import Eyebrow from '../components/Eyebrow.astro';
 import SlashNav from '../components/SlashNav.astro';
+import Sidebar from '../components/Sidebar.astro';
+
+const channels = [
+  {
+    key: 'email',
+    val: 'kevinxmedina@gmail.com',
+    href: 'mailto:kevinxmedina@gmail.com',
+    note: 'best for anything that needs more than a sentence',
+  },
+  {
+    key: 'github',
+    val: 'github.com/kevsq',
+    href: 'https://github.com/kevsq',
+    note: 'issues & PRs · open source',
+  },
+  {
+    key: 'guestbook',
+    val: '/guestbook',
+    href: '/guestbook',
+    note: 'a public note · 280 chars',
+  },
+  {
+    key: 'rss',
+    val: '/feed.xml',
+    href: '/feed.xml',
+    note: 'to listen, not to talk',
+  },
+];
 ---
 <Base title="Contact — Kevin's Field Journal">
   <main class="page">
     <article>
+      <Eyebrow sub="contact · the open door" />
+      <h1 class="title">Say <em>hello</em>.</h1>
+      <p class="tagline">The inbox is genuinely open. No form, no ticket system, just email.</p>
       <SlashNav active="/contact" />
-      <h1 class="stub-title">contact</h1>
-      <p class="stub-note">Not yet designed — coming soon.</p>
+
+      <div class="divider-label">❦ ways to reach me</div>
+      <div class="channels">
+        {channels.map(ch => (
+          <div class="channel">
+            <span class="key">{ch.key}</span>
+            <span class="val"><a href={ch.href}>{ch.val}</a></span>
+            <span class="note">{ch.note}</span>
+          </div>
+        ))}
+      </div>
+
+      <div class="divider-label">❦ what gets a fast reply</div>
+      <div class="prose">
+        <p>
+          Job opportunities — especially if the work involves distributed systems, storage, or queues.
+          <span style="color: var(--moss);">●</span> I'm currently open to staff and senior backend roles.
+          Questions about open-source projects I maintain. Interesting technical problems you're thinking through.
+          Fellow engineers who want to compare notes.
+        </p>
+      </div>
+
+      <div class="divider-label">❦ what gets a slow reply</div>
+      <div class="prose" style="color: var(--dim);">
+        <p>
+          Everything else — still read, still appreciated, just takes longer.
+          I check email a couple of times a week and try not to let it run my schedule.
+        </p>
+      </div>
+
+      <div class="pgp">
+        <div class="pgp-head">PGP · for the curious</div>
+        4E2A B193 F84D 3C9A 7B6E · 1D04 82C3 A057 9F1B 2E48<br/>
+        <a href="https://keys.openpgp.org" style="color: var(--accent);">keys.openpgp.org</a>
+      </div>
     </article>
+
+    <Sidebar>
+      <div class="block">
+        <div class="heading">timezone</div>
+        <div>brooklyn · ET<br/>replies: weekdays</div>
+      </div>
+      <div class="block">
+        <div class="heading">availability</div>
+        <div class="body" style="color: var(--moss);">● open to roles</div>
+        <div>staff / senior backend<br/>remote or nyc</div>
+      </div>
+      <div class="block">
+        <div class="heading">no thanks</div>
+        <div style="color: var(--dim);">· crypto pitches<br/>· seo "guest posts"<br/>· cold ai outreach</div>
+      </div>
+    </Sidebar>
   </main>
 </Base>
+
 <style>
-  .page { max-width: 760px; margin: 0 auto; padding: 28px 40px 36px; }
-  .stub-title { font-family: var(--serif); font-weight: 400; font-size: 30px; color: var(--fg); font-style: italic; margin: 0 0 12px; letter-spacing: -0.3px; }
-  .stub-note { font-family: var(--mono); font-size: 11px; color: var(--dim); }
-  @media (max-width: 640px) { .page { padding: 20px 20px 28px; } }
+  .channels {
+    padding: 4px 0 8px;
+  }
+  .channel {
+    display: grid;
+    grid-template-columns: 90px 1fr auto;
+    gap: 14px;
+    padding: 12px 0;
+    border-bottom: 1px dashed var(--border);
+    align-items: baseline;
+  }
+  .channel:last-of-type { border-bottom: none; }
+
+  .key {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+  }
+  .val {
+    font-family: var(--serif);
+    font-size: 16px;
+    color: var(--fg);
+  }
+  .val a {
+    text-decoration: underline var(--accent);
+    text-underline-offset: 4px;
+    text-decoration-thickness: 1px;
+  }
+  .val a:hover { text-decoration-thickness: 2px; }
+
+  .note {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--dim);
+    text-align: right;
+    max-width: 18ch;
+    line-height: 1.45;
+  }
+
+  .pgp {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 10px 12px;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--dim);
+    margin-top: 18px;
+    word-break: break-all;
+  }
+  .pgp-head {
+    color: var(--accent);
+    margin-bottom: 4px;
+    letter-spacing: 1px;
+  }
+
+  @media (max-width: 640px) {
+    .channel { grid-template-columns: 70px 1fr; }
+    .note { display: none; }
+  }
 </style>
