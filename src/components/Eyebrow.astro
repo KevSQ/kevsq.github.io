@@ -1,6 +1,13 @@
 ---
-import { getEyebrow } from '../config/site';
-const { vol, sub } = getEyebrow();
+import { getEyebrow } from '../config/helpers';
+
+interface Props {
+  sub?: string;
+}
+
+const { sub: subOverride } = Astro.props;
+const { vol, sub: autoSub } = getEyebrow();
+const sub = subOverride ?? autoSub;
 ---
 <div class="eyebrow">
   <span>{vol} ·</span>
