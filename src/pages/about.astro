@@ -1,19 +1,70 @@
 ---
 import Base from '../layouts/Base.astro';
+import Eyebrow from '../components/Eyebrow.astro';
 import SlashNav from '../components/SlashNav.astro';
+import Sidebar from '../components/Sidebar.astro';
 ---
 <Base title="About — Kevin's Field Journal">
   <main class="page">
     <article>
+      <Eyebrow sub="about · the long version" />
+      <h1 class="title">A bit <em>about me</em>.</h1>
+      <p class="tagline">The longer answer to "so, what do you do?"</p>
       <SlashNav active="/about" />
-      <h1 class="stub-title">about</h1>
-      <p class="stub-note">Not yet designed — coming soon.</p>
+
+      <div class="prose">
+        <p><span class="drop-cap">I</span>'m Kevin — a software engineer based in Brooklyn, NY. By day I work on backend systems: distributed databases, queues, the plumbing that keeps data moving reliably at scale. I've spent the past eight years thinking about consistency, latency, and the thousand ways a system can quietly misbehave at 3 a.m. I try to build things that are boring in the right ways.</p>
+        <p>I grew up tinkering with computers because they were the only things I could break and fix without my parents finding out. That spirit of low-stakes experimentation never really left. I still write small tools for myself — most of them live on GitHub, a few have quietly picked up users I've never met, which continues to be the strangest and best part of open source.</p>
+        <p>Outside the terminal: I read a lot (see <a href="/reading">/reading</a>), cook slowly on weekends, and have opinions about coffee that I keep mostly to myself. I am not on social media in any meaningful way. This site is where I write.</p>
+      </div>
+
+      <div class="divider-label">❦ the short version</div>
+      <p class="prose" style="font-style: italic; color: var(--dim);">
+        Backend engineer · 8 years · most fluent in Go, Rust, and the dialects of Postgres.
+        Currently <span style="color: var(--moss);">●</span> open to staff/senior backend roles, remote or NYC-hybrid.
+      </p>
+
+      <div class="divider-label">❦ elsewhere</div>
+      <p class="prose">
+        <a href="https://github.com/kevsq">github</a> ·
+        <a href="/feed.xml">rss</a> ·
+        <a href="/contact">email</a>
+      </p>
+
+      <div class="divider-label">❦ a small disclaimer</div>
+      <p style="font-size: 13.5px; color: var(--dim); line-height: 1.6; margin: 0;">
+        Everything here is mine and only mine — not my employer's, not my clients', not anyone else's.
+        Opinions expressed are subject to change without notice as I learn things.
+      </p>
     </article>
+
+    <Sidebar>
+      <div class="block">
+        <div class="heading">at a glance</div>
+        <div class="body">brooklyn, ny<br/>backend · 8y<br/>he/him</div>
+      </div>
+      <div class="block">
+        <div class="heading">currently</div>
+        <div class="body" style="color: var(--moss);">● available</div>
+        <div>for staff / senior<br/>backend roles</div>
+      </div>
+      <div class="block">
+        <div class="heading">colophon</div>
+        <div>astro + css<br/>no js for content<br/>tended by hand</div>
+      </div>
+    </Sidebar>
   </main>
 </Base>
+
 <style>
-  .page { max-width: 760px; margin: 0 auto; padding: 28px 40px 36px; }
-  .stub-title { font-family: var(--serif); font-weight: 400; font-size: 30px; color: var(--fg); font-style: italic; margin: 0 0 12px; letter-spacing: -0.3px; }
-  .stub-note { font-family: var(--mono); font-size: 11px; color: var(--dim); }
-  @media (max-width: 640px) { .page { padding: 20px 20px 28px; } }
+  .drop-cap {
+    float: left;
+    font-family: var(--serif);
+    font-size: 54px;
+    line-height: 0.9;
+    color: var(--accent);
+    padding-right: 8px;
+    padding-top: 4px;
+    font-weight: 600;
+  }
 </style>
