@@ -78,36 +78,40 @@ const archive = [
       <SlashNav active="/work" />
 
       <div class="label">❦ at work</div>
-      {atWork.map(p => (
-        <div class="project">
-          <div class="head">
-            <a class="name" href={p.href}>{p.name}</a>
-            <span class="role-tag">{p.role}</span>
+      <div class="project-list">
+        {atWork.map(p => (
+          <div class="project">
+            <div class="head">
+              <a class="name" href={p.href}>{p.name}</a>
+              <span class="role-tag">{p.role}</span>
+            </div>
+            <p class="blurb">{p.blurb}</p>
+            <div class="tags">
+              {p.pills.map(pill => <span class="pill">{pill}</span>)}
+              <span class="stack">{p.stack}</span>
+              {p.stars && <span style="margin-left: 8px; color: var(--accent);">{p.stars}</span>}
+            </div>
           </div>
-          <p class="blurb">{p.blurb}</p>
-          <div class="tags">
-            {p.pills.map(pill => <span class="pill">{pill}</span>)}
-            <span class="stack">{p.stack}</span>
-            {p.stars && <span style="margin-left: 8px; color: var(--accent);">{p.stars}</span>}
-          </div>
-        </div>
-      ))}
+        ))}
+      </div>
 
       <div class="label" style="margin-top: 24px;">❦ side projects</div>
-      {sideProjects.map(p => (
-        <div class="project">
-          <div class="head">
-            <a class="name" href={p.href}>{p.name}</a>
-            <span class="role-tag">{p.role}</span>
+      <div class="project-list">
+        {sideProjects.map(p => (
+          <div class="project">
+            <div class="head">
+              <a class="name" href={p.href}>{p.name}</a>
+              <span class="role-tag">{p.role}</span>
+            </div>
+            <p class="blurb">{p.blurb}</p>
+            <div class="tags">
+              {p.pills.map(pill => <span class="pill">{pill}</span>)}
+              <span class="stack">{p.stack}</span>
+              {p.stars && <span style="margin-left: 8px; color: var(--accent);">{p.stars}</span>}
+            </div>
           </div>
-          <p class="blurb">{p.blurb}</p>
-          <div class="tags">
-            {p.pills.map(pill => <span class="pill">{pill}</span>)}
-            <span class="stack">{p.stack}</span>
-            {p.stars && <span style="margin-left: 8px; color: var(--accent);">{p.stars}</span>}
-          </div>
-        </div>
-      ))}
+        ))}
+      </div>
 
       <div class="divider-label">❦ archive</div>
       <p style="font-size: 13px; color: var(--dim); font-family: var(--mono); line-height: 1.8; margin: 0;">
@@ -143,7 +147,7 @@ const archive = [
     padding: 14px 0;
     border-bottom: 1px dashed var(--border);
   }
-  .project:last-of-type { border-bottom: none; }
+  .project:last-child { border-bottom: none; }
 
   .head {
     display: flex;

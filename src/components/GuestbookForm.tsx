@@ -20,30 +20,27 @@ function relativeTime(iso: string): string {
 
 export default function GuestbookForm({ initialEntries }: Props) {
   const [name, setName]         = useState('');
-  const [location, setLocation] = useState('');
   const [message, setMessage]   = useState('');
   const [status, setStatus]     = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleGuestbookSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!name.trim() || !message.trim()) return;
     setStatus('sending');
     const { error } = await supabase.from('guestbook').insert({
       name: name.trim(),
       message: message.trim(),
-      location: location.trim() || null,
     });
     if (error) { setStatus('error'); return; }
     setStatus('sent');
     setName('');
-    setLocation('');
     setMessage('');
   }
 
   return (
     <>
       <div className="label">✎ leave a note</div>
-      <form className="gb-form" onSubmit={handleSubmit}>
+      <form className="gb-form" onSubmit={handleGuestbookSubmit}>
         <div className="row">
           <div className="field">
             <label htmlFor="gb-name">your name (or a handle)</label>
@@ -55,22 +52,6 @@ export default function GuestbookForm({ initialEntries }: Props) {
               onChange={e => setName(e.target.value)}
               maxLength={80}
               required
-            />
-          </div>
-          <div className="field">
-            <label htmlFor="gb-where">
-              where you're writing from{' '}
-              <span style={{ color: 'var(--dim)', textTransform: 'none', letterSpacing: 0 }}>
-                (optional)
-              </span>
-            </label>
-            <input
-              id="gb-where"
-              type="text"
-              placeholder="e.g. brooklyn, ny"
-              value={location}
-              onChange={e => setLocation(e.target.value)}
-              maxLength={80}
             />
           </div>
         </div>
@@ -102,9 +83,8 @@ export default function GuestbookForm({ initialEntries }: Props) {
       {initialEntries.map((entry, i) => (
         <div key={entry.id} className={i === 0 ? 'entry featured' : 'entry'}>
           <p className="msg">{entry.message}</p>
-          <div className="sig">
+          <div className="sig"> {/* TODO: Adjust the spacing between the two spans. */}
             <span className="who">— {entry.name}</span>
-            {entry.location && <span className="where">{entry.location}</span>}
             <span>· {relativeTime(entry.created_at)}</span>
           </div>
         </div>

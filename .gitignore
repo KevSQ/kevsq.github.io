@@ -1,6 +1,6 @@
 #Claude Code Notes
 docs/
-
+.handoffs/
 # build output
 dist/
 # generated types
