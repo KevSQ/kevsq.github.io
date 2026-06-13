@@ -14,47 +14,50 @@ import { profile } from '../data/profile';
       <SlashNav active="/about" />
 
       <div class="prose">
-        <p><span>I</span>'m Kevin — a software engineer based in Brooklyn, NY. 
-          By day I work on backend systems: distributed databases, queues, the 
-          plumbing that keeps data moving reliably at scale. I've spent the
-           past eight years thinking about consistency, latency, and the
-            thousand ways a system can quietly misbehave at 3 a.m. I try to
-             build things that are boring in the right ways.</p>
-        <p>I grew up tinkering with computers because they were the only things 
-          I could break and fix without my parents finding out. 
-          That spirit of low-stakes experimentation never really left.
-           I still write small tools for myself — most of them live on GitHub, a
-            few have quietly picked up users I've never met, which continues to be
-             the strangest and best part of open source.</p>
-        <p>Outside the terminal: I read a lot (see <a href="/reading">/reading</a>), cook slowly on weekends, and have opinions about coffee that I keep mostly to myself. I am not on social media in any meaningful way. This site is where I write.</p>
+        <p>I'm Kevin — a Software Engineer born, raised and based in New York City. I'm currently employed
+          as a Data & AI Engineer, where I build and maintain AI-powered data pipelines and infastructure that powers agentic workflows and self-service BI tools.
+          I have been programming since I was in middle school and have a background in full stack engineering, although these days I've mostly been focusing on Applied AI engineering.
+        </p>
+
+        <p>As a child, I grew up dissasembling, assembling (and inevitably breaking) electronics out of pure curiosity — I was fascinated by technology
+           and how it solved meaningful problems and unlocked new possibilities for people. This curiosity eventually led me to discover programming, where I realized
+           I could <i>solve</i> meaningful problems in my own life <i>myself</i>!
+          This passion for problem solving led me to join as many technology related programs as I could, where I honed my skills and learned with like-minded peers, and ultimately
+          culminated in me obtaining a Bachelor of Arts in Computer Science.
+        </p>
+
+        <p>
+          Now, I focus primarily on Applied AI Engineering opportunities; to be specific, I work and study ways to push the limits of AI agents, making them as efficient, accessible, and useful as possible.
+          Most recently, this has led me to explore local/edge computed AI, as it positions itself as the best solution for scaling AI in a cost effective and accessible manner given rising inference costs.
+        </p>
+        <p>Outside the terminal: I like to read (see <a href="/reading">/reading</a>), enjoy life on the weekends, and share my opinions on life, technology, and society online.
+        I used to play a lot of video games but don't have too much time for that these days! </p>
+        
+        <a href="/contact">contact me here</a>
       </div>
-
-      <div class="divider-label">❦ elsewhere</div>
-      <p class="prose">
-        <a href="/contact">contact me</a>
-      </p>
-
       <div class="divider-label">❦ a small disclaimer</div>
-      <p style="font-size: 13.5px; color: var(--dim); line-height: 1.6; margin: 0;">
-        Everything here is mine and only mine — not my employer's, not my clients', not anyone else's.
-        Opinions expressed are subject to change without notice as I learn things.
+      <p style="font-size: 11px; color: var(--dim); line-height: 1.6; margin: 0;">
+        Everything here is my own words and mine alone — not my employer's, not my clients', not anyone else's.
+        All opinions expressed are my own and do not reflect the opinions of any current or past employers or clients. 
+        I am not a spokesperson for any company, product, or technology.
+        Opinions expressed are subject to change without notice as I learn things and grow from mistakes!
       </p>
     </article>
 
     <Sidebar>
       <div class="block">
         <div class="heading">at a glance</div>
-        <div class="body">{profile.location}<br/>backend · {profile.yearsExp}<br/>{profile.pronouns}</div>
+        <div class="body">{profile.location}<br/>Applied AI and Data Engineer · {profile.yearsExp} of professional experience <br/></div>
       </div>
       <div class="block">
         <div class="heading">currently</div>
         <div class="body" style="color: var(--moss);">● {profile.availability}</div>
         <div>for {profile.targetRoles}</div>
       </div>
-      <div class="block">
+      <!-- <div class="block">
         <div class="heading">colophon</div>
         <div>astro + css<br/>no js for content<br/>tended by hand</div>
-      </div>
+      </div> -->
     </Sidebar>
   </main>
 </Base>

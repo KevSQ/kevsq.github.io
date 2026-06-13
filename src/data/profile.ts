@@ -10,10 +10,10 @@ export interface Profile {
 
 export const profile: Profile = {
   availability: 'available',
-  targetRoles: 'staff / senior backend',
-  location: 'brooklyn, ny',
-  locationAlt: 'remote or nyc',
+  targetRoles: 'Applied AI, Backend, Data and Customer-facing Engineering roles.',
+  location: 'New York, NY',
+  locationAlt: 'Remote or NYC',
   pronouns: 'he/him',
-  yearsExp: '8y',
-  shortBio: "I'm Kevin, a Brooklyn-based software engineer focused on backend systems. I write here about the craft, the tools, and what I'm learning. Recruiters welcome — clean PDF resume one click away.",
-};
+  yearsExp: '2y',
+  shortBio: "I'm Kevin, a New York-based Software Engineer curently focused on applied AI systems and local AI. I write my thoughts, opinions and hot takes here."
+}
